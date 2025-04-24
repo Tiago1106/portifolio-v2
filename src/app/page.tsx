@@ -1,103 +1,165 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { content } from "@/content";
+import { CodeBlock } from "@/lib/code-block";
+import { EditorLayout } from "@/lib/editor-layout";
+import { Header } from "@/lib/header";
+import { Explorer } from "@/lib/explorer";
+import { MainContent } from "@/lib/main-container";
+import { Tabs } from "@/lib/tsbs";
+import { Sidebar } from "@/lib/sidebar";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [currentFile, setCurrentFile] = useState("");
+  const [openFiles, setOpenFiles] = useState<string[]>([]);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const [activeTab, setActiveTab] = useState<string>("sobre");
+
+  const fileTitles: Record<string, string> = {
+    sobre: "Sobre.md",
+    stacks: "Stacks.md",
+    carreira: "Carreira.md",
+    projeto1: "Projeto 1.md",
+    projeto2: "Projeto 2.md",
+    contato: "Contato.md",
+  };
+
+  const renderContent = () => {
+    switch (currentFile) {
+      case "sobre":
+        return (
+          <CodeBlock content={content.sobre} />
+        );
+      case "stacks":
+        return (
+          <CodeBlock content={content.stacks} />
+        );
+      case "carreira":
+        return (
+          <CodeBlock content={content.carreira} />
+        );
+      case "projeto1":
+        return (
+          <CodeBlock content={content.projeto1} />
+        );
+      case "projeto2":
+        return (
+          <CodeBlock content={content.projeto2} />
+        );
+      case "contato":
+        return (
+          <CodeBlock content={content.contato} />
+        );
+      default:
+        return (
+          <div className="h-full w-full flex items-center justify-center text-center text-[#7c7c7c] text-sm italic px-4">
+            👨‍💻 Olá! <br />
+            Use o menu à esquerda pra explorar sobre mim, ver meus projetos ou entrar em contato. <br />
+          </div>
+        );
+    }
+  };
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "sobre":
+        return (
+          <>
+            <div
+              className="cursor-pointer hover:bg-[#2a2d2e] px-2 py-1 rounded"
+              onClick={() => handleOpenFile("sobre")}
+            >
+              📄 Sobre.md
+            </div>
+            <div
+              className="cursor-pointer hover:bg-[#2a2d2e] px-2 py-1 rounded"
+              onClick={() => handleOpenFile("carreira")}
+            >
+              📄 Carreira.md
+            </div>
+            <div
+              className="cursor-pointer hover:bg-[#2a2d2e] px-2 py-1 rounded"
+              onClick={() => handleOpenFile("stacks")}
+            >
+              📄 Stacks.md
+            </div>
+          </>
+        );
+      case "projetos":
+        return (
+          <>
+            <div
+              className="cursor-pointer hover:bg-[#2a2d2e] px-2 py-1 rounded"
+              onClick={() => handleOpenFile("projeto1")}
+            >
+              📄 Projeto 1.md
+            </div>
+            <div
+              className="cursor-pointer hover:bg-[#2a2d2e] px-2 py-1 rounded"
+              onClick={() => handleOpenFile("projeto2")}
+            >
+              📄 Projeto 2.md
+            </div>
+          </>
+        );
+      case "contato":
+        return (
+          <div
+            className="cursor-pointer hover:bg-[#2a2d2e] px-2 py-1 rounded"
+            onClick={() => handleOpenFile("contato")}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            📄 Contato.md
+          </div>
+        );
+    }
+  };
+
+
+  const handleOpenFile = (file: string) => {
+    if (!openFiles.includes(file)) {
+      setOpenFiles([...openFiles, file]); // Adiciona à lista de arquivos abertos
+    }
+    setCurrentFile(file); // Torna o arquivo o arquivo atual
+  };
+
+  const handleCloseFile = (file: string) => {
+    const index = openFiles.indexOf(file);
+    const updatedFiles = openFiles.filter(f => f !== file);
+
+    if (file === currentFile) {
+      const previous = openFiles[index - 1];
+      const next = openFiles[index + 1];
+
+      if (previous) {
+        setCurrentFile(previous);
+      } else if (next) {
+        setCurrentFile(next);
+      } else {
+        setCurrentFile("");
+      }
+    }
+
+    setOpenFiles(updatedFiles);
+  };
+
+  return (
+    <EditorLayout>
+      <Header currentFile={currentFile} fileTitles={fileTitles} />
+      <div className="flex-1 overflow-auto relative flex flex-row h-full">
+        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Explorer renderTabContent={renderTabContent} />
+        <MainContent>
+          <Tabs
+            openFiles={openFiles}
+            currentFile={currentFile}
+            setCurrentFile={setCurrentFile}
+            fileTitles={fileTitles}
+            handleCloseFile={handleCloseFile}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <div className="p-4 overflow-auto h-full">{renderContent()}</div>
+        </MainContent>
+      </div>
+    </EditorLayout>
   );
 }
