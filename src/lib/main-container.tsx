@@ -5,7 +5,7 @@ interface MainContentProps {
 }
 
 export const MainContent: React.FC<MainContentProps> = ({ children }) => (
-  <div className="flex-1 bg-[#1e1e1e] overflow-hidden h-[98%]">
+  <div className="flex flex-col flex-1 overflow-hidden">
     {children}
   </div>
 );

@@ -157,7 +157,9 @@ export default function Home() {
             fileTitles={fileTitles}
             handleCloseFile={handleCloseFile}
           />
-          <div className="p-4 overflow-auto h-full">{renderContent()}</div>
+          <div className="p-4 overflow-auto flex-1">
+            {renderContent()}
+          </div>
         </MainContent>
       </div>
     </EditorLayout>
